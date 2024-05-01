@@ -92,7 +92,7 @@ def measure_performance():
                 # Handle non-JSON results
                 print("Query Result:", result)
         except ValueError as e:
-            print("Error decoding JSON response:", e)
+            # print("Error decoding JSON response:", e)
             print("Response text:", response.text)
         
         print()
