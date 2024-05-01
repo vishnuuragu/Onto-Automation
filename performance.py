@@ -26,6 +26,7 @@ sparql_queries = [
     }
     """,
     """
+    PREFIX bibo: <http://purl.org/ontology/bibo/>
     PREFIX dc: <http://purl.org/dc/terms/>
 
     SELECT ?publisher
@@ -36,6 +37,7 @@ sparql_queries = [
     }
     """,
     """
+    PREFIX bibo: <http://purl.org/ontology/bibo/>
     PREFIX dc: <http://purl.org/dc/terms/>
     PREFIX amrita: <http://www.amrita.org/terms#>
 
@@ -94,7 +96,12 @@ def measure_performance():
         # Print query result or error message
         try:
             result = response.json()
-            print("Query Result:", result)
+            if isinstance(result, dict) and 'results' in result:
+                # Handle SPARQL JSON results
+                print("Query Result:", result['results']['bindings'])
+            else:
+                # Handle non-JSON results
+                print("Query Result:", result)
         except ValueError as e:
             print("Error decoding JSON response:", e)
             print("Response text:", response.text)
