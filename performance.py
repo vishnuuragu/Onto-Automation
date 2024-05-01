@@ -2,25 +2,69 @@ import requests
 import time
 import psutil
 
-# SPARQL endpoint URL
 sparql_endpoint = "http://Vishnu:7200/repositories/cs"
 
-# List of SPARQL queries
 sparql_queries = [
     """
     PREFIX bibo: <http://purl.org/ontology/bibo/>
-PREFIX dc: <http://purl.org/dc/terms/>
-PREFIX amrita: <http://www.amrita.org/terms#>
+    PREFIX dc: <http://purl.org/dc/terms/>
+    PREFIX amrita: <http://www.amrita.org/terms#>
 
-SELECT ?citations
-WHERE {
-  ?document rdf:type bibo:AcademicArticle ;
-           dc:title "Summarization of Research Publications Using Automatic Extraction" ;
-           amrita:Number_of_Citation ?citations .
-}
-
+    SELECT ?citations
+    WHERE {
+      ?document rdf:type bibo:AcademicArticle ;
+               dc:title "Summarization of Research Publications Using Automatic Extraction" ;
+               amrita:Number_of_Citation ?citations .
+    }
     """,
-    # Add more SPARQL queries here...
+    """
+    PREFIX bibo: <http://purl.org/ontology/bibo/>
+
+    SELECT (COUNT(?conferencePaper) AS ?count)
+    WHERE {
+      ?conferencePaper rdf:type bibo:Conference .
+    }
+    """,
+    """
+    PREFIX dc: <http://purl.org/dc/terms/>
+
+    SELECT ?publisher
+    WHERE {
+      ?article rdf:type bibo:AcademicArticle ;
+               dc:title "Personalized Abstract Review Summarization Using Personalized Key Information-Guided Network" ;
+               dc:publisher ?publisher .
+    }
+    """,
+    """
+    PREFIX dc: <http://purl.org/dc/terms/>
+    PREFIX amrita: <http://www.amrita.org/terms#>
+
+    SELECT ?Author
+    WHERE {
+      ?article rdf:type bibo:AcademicArticle ;
+               dc:title "Personalized Abstract Review Summarization Using Personalized Key Information-Guided Network" ;
+               amrita:hasAuthor  ?Author .
+    }
+    """,
+    """
+    PREFIX bibo: <http://purl.org/ontology/bibo/>
+    PREFIX amrita: <http://www.amrita.org/terms#>
+
+    SELECT (COUNT(?article) AS ?count)
+    WHERE {
+      ?article rdf:type bibo:AcademicArticle ;
+               amrita:hasAuthor amrita:Gowtham_Ramesh .
+    }
+    """,
+    """
+    PREFIX amrita: <http://www.amrita.org/terms#>
+
+    SELECT ?article ?citationCount
+    WHERE {
+      ?article amrita:Number_of_Citation ?citationCount .
+      FILTER (?citationCount > 20)
+    }
+    """
 ]
 
 def execute_sparql_query(query):
@@ -39,7 +83,6 @@ def execute_sparql_query(query):
     
     return response, execution_time, cpu_usage, memory_usage
 
-
 def measure_performance():
     for i, query in enumerate(sparql_queries, start=1):
         print(f"Executing Query {i}:")
@@ -53,11 +96,10 @@ def measure_performance():
             result = response.json()
             print("Query Result:", result)
         except ValueError as e:
-            print('')
+            print("Error decoding JSON response:", e)
+            print("Response text:", response.text)
         
         print()
-
-
 
 if __name__ == "__main__":
     measure_performance()
