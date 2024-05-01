@@ -39,27 +39,24 @@ def execute_sparql_query(query):
     
     return response, execution_time, cpu_usage, memory_usage
 
+
 def measure_performance():
     for i, query in enumerate(sparql_queries, start=1):
         print(f"Executing Query {i}:")
-        response, execution_time = execute_sparql_query(query)
+        response, execution_time, cpu_usage, memory_usage = execute_sparql_query(query)
         print("Execution Time:", execution_time, "seconds")
-        
-        # Measure CPU and memory usage
-        cpu_usage = psutil.cpu_percent()
-        memory_usage = psutil.virtual_memory().percent
-        print("CPU Usage:", cpu_usage, "%")
-        print("Memory Usage:", memory_usage, "%")
+        print("CPU Usage during query execution:", cpu_usage, "%")
+        print("Memory Usage during query execution:", memory_usage, "%")
         
         # Print query result or error message
         try:
             result = response.json()
             print("Query Result:", result)
         except ValueError as e:
-            print("Error decoding JSON response:", e)
-            print("Response text:", response.text)
+            print('')
         
         print()
+
 
 
 if __name__ == "__main__":
