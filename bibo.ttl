@@ -92,18 +92,6 @@ dc:publisher rdf:type owl:ObjectProperty ;
 dc:title rdf:type owl:ObjectProperty .
 
 
-###  http://purl.org/ontology/bibo/cites
-bibo:cites rdf:type owl:ObjectProperty ;
-           rdfs:domain bibo:Document ;
-           rdfs:range bibo:Document ;
-           rdfs:comment """Relates a document to another document that is cited
-by the first document as reference, comment, review, quotation or for
-another purpose."""@en ;
-           rdfs:isDefinedBy "http://purl.org/ontology/bibo/"^^xsd:anyURI ;
-           rdfs:label "cites"@en ;
-           vs:term_status "unstable" .
-
-
 ###  http://purl.org/ontology/bibo/issuer
 bibo:issuer rdf:type owl:ObjectProperty ;
             rdfs:subPropertyOf dc:publisher ;
