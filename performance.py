@@ -20,7 +20,7 @@ sparql_queries = [
 
 def execute_sparql_query(query):
     start_time = time.time()
-    response = requests.post(sparql_endpoint, data={"query": query})
+    response = requests.post(sparql_endpoint, data=query, headers={"Content-Type": "application/sparql-query;charset=utf-8"})
     execution_time = time.time() - start_time
     return response, execution_time
 
