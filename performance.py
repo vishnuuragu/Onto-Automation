@@ -71,27 +71,16 @@ sparql_queries = [
 
 def execute_sparql_query(query):
     start_time = time.time()
-    cpu_before = psutil.cpu_percent()
-    memory_before = psutil.virtual_memory().percent
-    
     response = requests.post(sparql_endpoint, data={"query": query})
-    
     execution_time = time.time() - start_time
-    cpu_after = psutil.cpu_percent()
-    memory_after = psutil.virtual_memory().percent
-    
-    cpu_usage = cpu_after - cpu_before
-    memory_usage = memory_after - memory_before
-    
-    return response, execution_time, cpu_usage, memory_usage
+    return response, execution_time
+
 
 def measure_performance():
     for i, query in enumerate(sparql_queries, start=1):
         print(f"Executing Query {i}:")
-        response, execution_time, cpu_usage, memory_usage = execute_sparql_query(query)
+        response, execution_time = execute_sparql_query(query)
         print("Execution Time:", execution_time, "seconds")
-        print("CPU Usage during query execution:", cpu_usage, "%")
-        print("Memory Usage during query execution:", memory_usage, "%")
         
         # Print query result or error message
         try:
@@ -107,6 +96,8 @@ def measure_performance():
             print("Response text:", response.text)
         
         print()
+
+
 
 if __name__ == "__main__":
     measure_performance()
