@@ -77,10 +77,12 @@ def execute_sparql_query(query):
 
 
 def measure_performance():
+    total_execution_time = 0
     for i, query in enumerate(sparql_queries, start=1):
         print(f"Executing Query {i}:")
         response, execution_time = execute_sparql_query(query)
         print("Execution Time:", execution_time, "seconds")
+        total_execution_time += execution_time
         
         # Print query result or error message
         try:
@@ -96,8 +98,8 @@ def measure_performance():
             print("Response text:", response.text)
         
         print()
-
-
+    
+    print("Total Execution Time for all queries:", total_execution_time, "seconds")
 
 if __name__ == "__main__":
     measure_performance()
